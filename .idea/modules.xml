@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/JavaTest/JavaTest.iml" filepath="$PROJECT_DIR$/JavaTest/JavaTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebMavenTest/WebMavenTest.iml" filepath="$PROJECT_DIR$/WebMavenTest/WebMavenTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mybatis/mybatis.iml" filepath="$PROJECT_DIR$/mybatis/mybatis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mybatisMoveSQL/mybatisMoveSQL.iml" filepath="$PROJECT_DIR$/mybatisMoveSQL/mybatisMoveSQL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quickstateMavenTest/quickstateMavenTest.iml" filepath="$PROJECT_DIR$/quickstateMavenTest/quickstateMavenTest.iml" />
+    </modules>
+  </component>
+</project>
