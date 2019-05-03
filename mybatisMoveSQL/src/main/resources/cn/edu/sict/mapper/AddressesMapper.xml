@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.sict.mapper.AddressesMapper">
+    <!--开启二级缓存-->
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true">
+    </cache>
+
+
+    <select id="queryByid" resultType="cn.edu.sict.pojo.Addresses">
+        select  *  from addresses where addrid=#{addrid}
+    </select>
+    <select id="queryState" resultType="cn.edu.sict.pojo.Addresses">
+        select * from addresses where  state=#{state}
+    </select>
+    <select id="queryCityCountry" resultType="cn.edu.sict.pojo.Addresses">
+        <!--  查询city和country如果存在一个那么只查询一个都存在都查询-->
+        select * from addresses
+        <where>
+            <if test="city !=null and city!=''">
+                and city=#{city}
+            </if>
+
+            <if test="country !=null and country!=''">
+                and country=#{country}
+            </if>
+            <if test="city==null or  city==''">
+                <!--传参均为空执行此查询不到值得SQL-->
+                or city="任意值"
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="cn.edu.sict.pojo.Addresses">
+        update addresses
+        <set>
+            <if test="street!=null and street!=''">
+                street=#{street},
+            </if>
+            <if test="city!=null and city!=''">
+                city=#{city},
+            </if>
+            <if test="state!=null and state!=''">
+                state=#{state},
+            </if>
+            <if test="zip!=null and zip!=''">
+                zip=#{zip},
+            </if>
+            <if test="country!=null and country!=''">
+                country=#{country}
+            </if>
+        </set>
+
+        <where>
+            addrid=#{addrid}
+        </where>
+    </update>
+
+    <select id="query" resultType="addresses" parameterType="addresses">
+        select * from addresses
+        <where>
+            <choose>
+                <when test="country !=  null and country != ''">
+                    and country=#{country}
+                </when>
+                <when test="state != null and state != ''">
+                    and state=#{state}
+                </when>
+                <otherwise>
+                    and city=#{city}
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="queryTrim" resultType="addresses" parameterType="addresses">
+        select * from addresses
+        <trim prefix="WHERE" prefixOverrides="AND | OR | ," suffixOverrides="AND | OR | ,">
+            <if test="street!=null and street!=''">
+                street=#{street} ,
+            </if>
+            <if test="city!=null and city!=''">
+                city=#{city} and
+            </if>
+            <if test="state!=null and state!=''">
+                , state=#{state} or
+            </if>
+            <if test="zip!=null and zip!=''">
+                or zip=#{zip} and
+            </if>
+            <if test="country!=null and country!=''">
+                and country=#{country} and
+            </if>
+        </trim>
+    </select>
+    <select id="queryByids" resultType="addresses">
+        select * from addresses
+        <where>
+            addrid in
+            <!--使用foreach遍历list集合方式
+            已open(开始
+            已close)结束
+            item将集合中的元素去一个名字item以次引用
+            separator已什么方式分隔
+            index 索引-->
+            <foreach collection="list" open="(" close=")" item="item" separator="," index="index">
+                #{item}+#{index}
+            </foreach>
+        </where>
+    </select>
+    <select id="queryLike" resultType="addresses">
+        select
+        <include refid="sql"/>
+        from addresses
+        where
+        city like concat("%",#{city},"%")
+    </select>
+    <sql id="sql">
+    city,state,country
+   </sql>
+</mapper>
